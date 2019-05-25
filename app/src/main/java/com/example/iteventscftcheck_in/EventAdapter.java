@@ -5,11 +5,15 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -45,7 +49,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             nameText = itemView.findViewById(R.id.tv_name);
             countText = itemView.findViewById(R.id.tv_count);
             descriptionText = itemView.findViewById(R.id.tv_decription);
-            itemBackground = itemView.findViewById(R.id.list_item);
+            itemBackground = itemView.findViewById(R.id.icon);
 
             itemView.setOnClickListener(this);
         }
@@ -62,7 +66,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     @Override
     public EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.news_item, parent, false);
+        View view = inflater.inflate(R.layout.item, parent, false);
         return new EventViewHolder(view);
     }
 
@@ -71,7 +75,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 //        if (!cursor.moveToPosition(position)) {
 //            return;
 //        }
-
 
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
@@ -100,8 +103,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                             .getNameRus();
         }
 
-//        String city = events.get(position)
-//                            .getTitle();
+
         String news = events.get(position)
                             .getTitle();
         String count = events.get(position)
@@ -111,12 +113,20 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
 
 
+        ImageView imageView = (ImageView) holder.itemBackground;
+
+        Glide
+                .with(context)
+                .load("http://i.imgur.com/3wQcZeY.jpg")
+                .into(imageView);
+
         holder.cityText.setText(city);
         holder.dateText.setText(date);
         holder.nameText.setText(news);
         holder.countText.setText(count);
         holder.descriptionText.setText(description);
-        holder.itemBackground.setBackgroundResource(R.drawable.ic_launcher_background);
+
+//        holder.itemBackground.setBackgroundResource(R.drawable.qqqw2);
     }
 
     public void setClickListener(ItemClickListener itemClickListener) {
@@ -132,55 +142,3 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         return events.size();
     }
 }
-
-//
-//    public EventAdapter(List<Events> events) {
-//        this.events = events;
-//    }
-//
-//
-//    public static class CardViewHolder extends RecyclerView.ViewHolder {
-//        CardView cardView;
-//
-//        CardViewHolder(CardView cv) {
-//            super(cv);
-//            cardView = cv;
-//        }
-//    }
-//
-//    @Override
-//    public CardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//        CardView cv = (CardView) LayoutInflater.from(parent.getContext())
-//                                               .inflate(R.layout.card_view_event, parent, false);
-//        return new CardViewHolder(cv);
-//    }
-//
-//    @Override
-//    public void onBindViewHolder(CardViewHolder cardViewHolder, int position) {
-//        CardView cardView = cardViewHolder.cardView;
-//        TextView title = cardView.findViewById(R.id.title);
-//        title.setText( events.get(position).getTitle());
-//        TextView content = cardView.findViewById(R.id.content);
-//        content.setText((CharSequence) events.get(position).getIconStatus());
-//
-//    }
-//
-//
-//    @Override
-//    public int getItemCount() {
-//        if (events == null)
-//            return 0;
-//        return events.size();
-//    }
-//
-//    class ViewHolder extends RecyclerView.ViewHolder {
-//        TextView post;
-//        TextView site;
-//
-//        public ViewHolder(View itemView) {
-//            super(itemView);
-//            post = (TextView) itemView.findViewById(R.id.textTitle);
-//            site = (TextView) itemView.findViewById(R.id.textDate);
-//        }
-//    }
-//}

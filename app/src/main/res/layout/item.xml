@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="200dp">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/list_item"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:orientation="vertical">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="150dp">
 
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
         <TextView
-            android:id="@+id/textDate"
+            android:id="@+id/tv_date"
             android:layout_width="144dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -20,43 +29,43 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textCity"
+            android:id="@+id/tv_city"
             android:layout_width="202dp"
             android:layout_height="21dp"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/textDate"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.673"
-            app:layout_constraintStart_toEndOf="@+id/textDate"
-            app:layout_constraintTop_toTopOf="@+id/textDate"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <TextView
-            android:id="@+id/textCount"
-            android:layout_width="70dp"
-            android:layout_height="21dp"
-            android:layout_marginTop="60dp"
             android:layout_marginEnd="16dp"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textCity" />
+            android:textAlignment="viewEnd"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_date"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
-            android:id="@+id/textTitle"
+            android:id="@+id/tv_count"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:textAlignment="viewEnd"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_name"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
             android:linksClickable="true"
-            android:textColorLink="@color/colorAccent"
-            app:layout_constraintBottom_toBottomOf="@+id/textCount"
-            app:layout_constraintStart_toStartOf="@+id/textDate" />
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/tv_date"
+            app:layout_constraintTop_toBottomOf="@+id/tv_date" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/textDescription"
+        android:id="@+id/tv_decription"
         android:layout_width="248dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
         android:textSize="12sp" />
 
 
