@@ -112,12 +112,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                                    .getDescription();
 
 
-
         ImageView imageView = (ImageView) holder.itemBackground;
 
         Glide
                 .with(context)
-                .load("http://i.imgur.com/3wQcZeY.jpg")
+                .load("https://team.cft.ru" + events.get(position)
+                                                    .getCardImage())
                 .into(imageView);
 
         holder.cityText.setText(city);
