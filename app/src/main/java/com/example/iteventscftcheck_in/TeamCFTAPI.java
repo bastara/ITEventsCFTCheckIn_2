@@ -7,7 +7,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public interface TeamCFTAPI {
-//    @GET("/events/{id}")
+//    @GET("/members/{id}")
 //    public Call<Events> getPostWithID(@Path("id") int id);
 
     @GET("/api/v1/Events/registration?token=cftte@mtest20!9")
@@ -19,6 +19,6 @@ public interface TeamCFTAPI {
     @GET("/api/v1/Registration/members/event/106?token=cftte@mtest20!9")
     public Call<List<Members>> getMembers();
 
-//    @POST("/events")
+//    @POST("/members")
 //    public Call<Events> postData(@Body Events data);
 }

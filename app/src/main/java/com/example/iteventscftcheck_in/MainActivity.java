@@ -4,12 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +39,7 @@ import retrofit2.Response;
 //}
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements EventAdapter.ItemClickListener {
     RecyclerView recyclerView;
     List<Events> events;
 
@@ -57,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         EventAdapter adapter = new EventAdapter(this, events);
+        adapter.setClickListener(MainActivity.this);
         recyclerView.setAdapter(adapter);
 
         App.getApi()
@@ -75,5 +73,13 @@ public class MainActivity extends AppCompatActivity {
                         .show();
                }
            });
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Intent intent = new Intent(MainActivity.this,
+                ParticipantActivity.class);
+        intent.putExtra("id", String.valueOf(position));
+        startActivity(intent);
     }
 }
