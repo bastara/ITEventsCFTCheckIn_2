@@ -36,6 +36,7 @@ public class ParticipantActivity extends AppCompatActivity implements Participan
         adapter.setClickListener(ParticipantActivity.this);
         recyclerView.setAdapter(adapter);
 
+
         App.getApi()
            .getMembers()
            .enqueue(new Callback<List<Members>>() {
@@ -45,6 +46,7 @@ public class ParticipantActivity extends AppCompatActivity implements Participan
                    recyclerView.getAdapter()
                                .notifyDataSetChanged();
                }
+
 
                @Override
                public void onFailure(Call<List<Members>> call, Throwable t) {
