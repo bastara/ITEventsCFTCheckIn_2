@@ -20,8 +20,6 @@ public class ParticipantActivity extends AppCompatActivity implements Participan
     RecyclerView recyclerView;
     List<Members> members;
 
-    private ParticipantAdapter adapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +36,7 @@ public class ParticipantActivity extends AppCompatActivity implements Participan
 
 
         App.getApi()
-           .getMembers()
+           .getMembersId(106)
            .enqueue(new Callback<List<Members>>() {
                @Override
                public void onResponse(Call<List<Members>> call, Response<List<Members>> response) {
@@ -59,7 +57,7 @@ public class ParticipantActivity extends AppCompatActivity implements Participan
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(ParticipantActivity.this,
-                ParticipantActivity.class);
+                PersonalData.class);
         intent.putExtra("id", String.valueOf(position));
         startActivity(intent);
     }

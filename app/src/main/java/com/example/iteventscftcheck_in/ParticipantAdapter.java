@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,24 +14,24 @@ import java.util.List;
 
 class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.ParticipantViewHolder> {
 
-    private List<Members> events;
-
+    private List<Members> members;
     private final Context context;
-
     private ItemClickListener itemClickListener;
 
-    public ParticipantAdapter(Context context, List<Members> events) {
-        this.events = events;
+    public ParticipantAdapter(Context context, List<Members> members) {
+        this.members = members;
         this.context = context;
     }
 
     public class ParticipantViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        final TextView linkText;
+        final TextView lastName;
+        final CheckBox checkBox;
 
         ParticipantViewHolder(View itemView) {
             super(itemView);
 
-            linkText = itemView.findViewById(R.id.tv_participant);
+            lastName = itemView.findViewById(R.id.tv_participant);
+            checkBox = itemView.findViewById(R.id.cb_participant);
 
             itemView.setOnClickListener(this);
         }
@@ -54,9 +55,11 @@ class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.Partici
 
     @Override
     public void onBindViewHolder(@NonNull ParticipantAdapter.ParticipantViewHolder holder, int position) {
-        String news = events.get(position)
-                            .getLastName();
-        holder.linkText.setText(news);
+        String participantName = members.get(position)
+                                        .getLastName();
+
+
+        holder.lastName.setText(participantName);
     }
 
     public void setClickListener(ParticipantAdapter.ItemClickListener itemClickListener) {
@@ -70,6 +73,6 @@ class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.Partici
 
     @Override
     public int getItemCount() {
-        return events.size();
+        return members.size();
     }
 }
