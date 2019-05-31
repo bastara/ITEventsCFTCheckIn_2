@@ -8,36 +8,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.example.iteventscftcheck_in.db.DatabaseHelper;
+import com.example.iteventscftcheck_in.db.model.DataModel;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-//public class MainActivity extends AppCompatActivity {
-//
-//    private ImageView mImageView;
-//    private String mImageAddress =
-//            "http://developer.alexanderklimov.ru/android/images/android_cat.jpg";
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.test1);
-//
-//        mImageView = findViewById(R.id.icon);
-//    }
-//
-//    public void onClick(View view) {
-//        // Загружаем картинку
-//        Glide
-//                .with(this)
-//                .load(mImageAddress)
-//                .into(mImageView);
-//    }
-//}
-
 
 public class MainActivity extends AppCompatActivity implements EventAdapter.ItemClickListener {
     RecyclerView recyclerView;
@@ -63,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.Item
                @Override
                public void onResponse(Call<List<Events>> call, Response<List<Events>> response) {
                    events.addAll(response.body());
+                   fillDB();
                    recyclerView.getAdapter()
                                .notifyDataSetChanged();
                }
@@ -73,6 +57,60 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.Item
                         .show();
                }
            });
+    }
+
+    private void fillDB() {
+        DatabaseHelper databaseHelper = App.getInstance()
+                                           .getDatabaseInstance();
+
+        DataModel model = new DataModel();
+
+
+        for (int i = 0; i < events.size(); i++) {
+            model.setId(events.get(i)
+                              .getId());
+
+            if (databaseHelper.getDataDao()
+                              .getDataById(model.getId()) != null) {
+                continue;
+            }
+
+            model.setName(events.get(i)
+                                .getTitle());
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+            String date = null;
+            try {
+                date = DateFormat.getDateInstance(DateFormat.MEDIUM)
+                                 .format(sdf.parse(events.get(i)
+                                                         .getDate()
+                                                         .getStart()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            model.setDate(date);
+
+            List<City> listCity = events.get(i)
+                                        .getCities();
+            String city = "";
+
+            for (int j = 0; j < listCity.size(); j++) {
+                if (j != 0) {
+                    city += "\n";
+                }
+                city += listCity.get(j)
+                                .getNameRus();
+            }
+            model.setCity(city);
+
+            model.setDescription(events.get(i)
+                                       .getDescription());
+
+            databaseHelper.getDataDao()
+                          .insert(model);
+            model = null;
+        }
     }
 
     @Override

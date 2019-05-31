@@ -71,17 +71,15 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     @Override
     public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
-        String eventDateStart = null;
+        String date = null;
         try {
-            eventDateStart = DateFormat.getDateInstance(DateFormat.MEDIUM)
-                                       .format(sdf.parse(events.get(position)
+            date = DateFormat.getDateInstance(DateFormat.MEDIUM)
+                             .format(sdf.parse(events.get(position)
                                                                .getDate()
                                                                .getStart()));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-        String date = eventDateStart;
 
         List<City> listCity = events.get(position)
                                     .getCities();
@@ -97,7 +95,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         }
 
 
-        String news = events.get(position)
+        String name = events.get(position)
                             .getTitle();
         String count = events.get(position)
                              .getEventFormat();
@@ -115,7 +113,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
         holder.cityText.setText(city);
         holder.dateText.setText(date);
-        holder.nameText.setText(news);
+        holder.nameText.setText(name);
         holder.countText.setText(count);
         holder.descriptionText.setText(description);
 
