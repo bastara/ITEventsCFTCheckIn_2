@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.iteventscftcheck_in.db.model.DataModel;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -24,9 +25,11 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     private List<Events> events;
     private final Context context;
     private ItemClickListener itemClickListener;
+    private List<DataModel> dataModels;
 
-    EventAdapter(Context context, List<Events> events) {
-        this.events = events;
+    EventAdapter(Context context, List<DataModel> dataModels) {
+//        this.events = events;
+        this.dataModels = dataModels;
         this.context = context;
     }
 
@@ -37,7 +40,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         final TextView nameText;
         final TextView countText;
         final TextView descriptionText;
-        final View itemBackground;
+//        final View itemBackground;
 
         EventViewHolder(View itemView) {
             super(itemView);
@@ -47,7 +50,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             nameText = itemView.findViewById(R.id.tv_name);
             countText = itemView.findViewById(R.id.tv_count);
             descriptionText = itemView.findViewById(R.id.tv_decription);
-            itemBackground = itemView.findViewById(R.id.icon);
+//            itemBackground = itemView.findViewById(R.id.icon);
 
             itemView.setOnClickListener(this);
         }
@@ -70,53 +73,62 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
     @Override
     public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
-        String date = null;
-        try {
-            date = DateFormat.getDateInstance(DateFormat.MEDIUM)
-                             .format(sdf.parse(events.get(position)
-                                                               .getDate()
-                                                               .getStart()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        List<City> listCity = events.get(position)
-                                    .getCities();
-
-        String city = "";
-
-        for (int i = 0; i < listCity.size(); i++) {
-            if (i != 0) {
-                city += "\n";
-            }
-            city += listCity.get(i)
-                            .getNameRus();
-        }
-
-
-        String name = events.get(position)
-                            .getTitle();
-        String count = events.get(position)
-                             .getEventFormat();
-        String description = events.get(position)
-                                   .getDescription();
-
-
-        ImageView imageView = (ImageView) holder.itemBackground;
-
-        Glide
-                .with(context)
-                .load("https://team.cft.ru" + events.get(position)
-                                                    .getCardImage())
-                .into(imageView);
-
-        holder.cityText.setText(city);
-        holder.dateText.setText(date);
-        holder.nameText.setText(name);
-        holder.countText.setText(count);
-        holder.descriptionText.setText(description);
-
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+//        String date = null;
+//        try {
+//            date = DateFormat.getDateInstance(DateFormat.MEDIUM)
+//                             .format(sdf.parse(events.get(position)
+//                                                     .getDate()
+//                                                     .getStart()));
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//
+//        List<City> listCity = events.get(position)
+//                                    .getCities();
+//
+//        String city = "";
+//
+//        for (int i = 0; i < listCity.size(); i++) {
+//            if (i != 0) {
+//                city += "\n";
+//            }
+//            city += listCity.get(i)
+//                            .getNameRus();
+//        }
+//
+//
+//        String name = events.get(position)
+//                            .getTitle();
+//        String count = events.get(position)
+//                             .getEventFormat();
+//        String description = events.get(position)
+//                                   .getDescription();
+//
+//
+//        ImageView imageView = (ImageView) holder.itemBackground;
+//
+//        Glide
+//                .with(context)
+//                .load("https://team.cft.ru" + events.get(position)
+//                                                    .getCardImage())
+//                .into(imageView);
+//
+//        holder.cityText.setText(city);
+//        holder.dateText.setText(date);
+//        holder.nameText.setText(name);
+//        holder.countText.setText(count);
+//        holder.descriptionText.setText(description);
+        holder.dateText.setText(dataModels.get(position)
+                                          .getDate());
+        holder.cityText.setText(dataModels.get(position)
+                                          .getCity());
+        holder.nameText.setText(dataModels.get(position)
+                                          .getName());
+        holder.countText.setText(dataModels.get(position)
+                                           .getCount());
+        holder.descriptionText.setText(dataModels.get(position)
+                                                 .getDescription());
     }
 
     public void setClickListener(ItemClickListener itemClickListener) {
@@ -129,6 +141,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
     @Override
     public int getItemCount() {
-        return events.size();
+//        return events.size();
+        return dataModels.size();
     }
 }

@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.Item
     RecyclerView recyclerView;
     List<Events> events;
 
+    private DatabaseHelper databaseHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,9 +38,11 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.Item
         recyclerView = findViewById(R.id.recycle_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        EventAdapter adapter = new EventAdapter(this, events);
+        databaseHelper = App.getInstance().getDatabaseInstance();
+        EventAdapter adapter = new EventAdapter(this,  databaseHelper.getDataDao().getAllData());
         adapter.setClickListener(MainActivity.this);
         recyclerView.setAdapter(adapter);
+
 
         App.getApi()
            .getAllPosts()
@@ -47,8 +51,8 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.Item
                public void onResponse(Call<List<Events>> call, Response<List<Events>> response) {
                    events.addAll(response.body());
                    fillDB();
-                   recyclerView.getAdapter()
-                               .notifyDataSetChanged();
+//                   recyclerView.getAdapter()
+//                               .notifyDataSetChanged();
                }
 
                @Override
@@ -71,7 +75,9 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.Item
                               .getId());
 
             if (databaseHelper.getDataDao()
-                              .getDataById(model.getId()) != null) {
+                              .getDataById(model.getId())
+                              .size() == 1) {
+
                 continue;
             }
 
@@ -109,7 +115,6 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.Item
 
             databaseHelper.getDataDao()
                           .insert(model);
-            model = null;
         }
     }
 
