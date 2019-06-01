@@ -1,4 +1,4 @@
-package com.example.iteventscftcheck_in;
+package com.example.iteventscftcheck_in.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,37 +7,32 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.iteventscftcheck_in.App;
+import com.example.iteventscftcheck_in.R;
 import com.example.iteventscftcheck_in.db.DatabaseHelper;
-import com.example.iteventscftcheck_in.db.model.EventsModel;
 import com.example.iteventscftcheck_in.db.model.ParticipantModel;
 
 import java.util.List;
 
-class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.ParticipantViewHolder> {
+public class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.ParticipantViewHolder> {
 
-    private final Context context;
+    private Context context;
     private ItemClickListener itemClickListener;
     private List<ParticipantModel> participantModels;
-
     private ParticipantModel participantModelEntity;
+    private DatabaseHelper databaseHelper = App.getInstance()
+                                               .getDatabaseInstance();
 
-    DatabaseHelper databaseHelper = App.getInstance()
-                                       .getDatabaseInstance();
 
-
-    public ParticipantAdapter(Context context, List<ParticipantModel> participantModels) {
-        this.context = context;
+    public ParticipantAdapter(List<ParticipantModel> participantModels) {
         this.participantModels = participantModels;
     }
 
-    public class ParticipantViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
-//            , CompoundButton.OnCheckedChangeListener
-    {
+    public class ParticipantViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final TextView lastName;
         final CheckBox checkBox;
 
@@ -58,6 +53,12 @@ class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.Partici
         }
     }
 
+
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        context = recyclerView.getContext();
+    }
 
     @NonNull
     @Override
@@ -84,11 +85,8 @@ class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.Partici
 
                 if (participantModels.get(holder.getAdapterPosition())
                                      .isVisited()) {
-//                    participantModels.get(holder.getAdapterPosition())
-//                                     .setVisited(false);
                     participantModelEntity.setVisited(false);
                 } else {
-//                    participantModels.get(holder.getAdapterPosition()).setVisited(true);
                     participantModelEntity.setVisited(true);
                 }
                 databaseHelper.getDataDao()
@@ -108,7 +106,6 @@ class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.Partici
 
     @Override
     public int getItemCount() {
-//        return members.size();
         return participantModels.size();
     }
 }

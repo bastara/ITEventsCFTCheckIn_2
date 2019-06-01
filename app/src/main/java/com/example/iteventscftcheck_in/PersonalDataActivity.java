@@ -3,22 +3,12 @@ package com.example.iteventscftcheck_in;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.iteventscftcheck_in.db.DatabaseHelper;
 
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class PersonalData extends AppCompatActivity {
-
-    private DatabaseHelper databaseHelper;
+public class PersonalDataActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,31 +24,31 @@ public class PersonalData extends AppCompatActivity {
         Intent intent = getIntent();
         int position = Integer.parseInt(intent.getStringExtra("id"));
 
-        databaseHelper = App.getInstance()
-                            .getDatabaseInstance();
+        DatabaseHelper databaseHelper = App.getInstance()
+                                           .getDatabaseInstance();
         firstName.setText(databaseHelper.getDataDao()
                                         .getAllDataParticipant()
                                         .get(position)
                                         .getFirstName());
 
         lastName.setText(databaseHelper.getDataDao()
-                                        .getAllDataParticipant()
-                                        .get(position)
-                                        .getLastName());
+                                       .getAllDataParticipant()
+                                       .get(position)
+                                       .getLastName());
 
         phone.setText(databaseHelper.getDataDao()
-                                        .getAllDataParticipant()
-                                        .get(position)
-                                        .getPhone());
+                                    .getAllDataParticipant()
+                                    .get(position)
+                                    .getPhone());
 
         email.setText(databaseHelper.getDataDao()
-                                        .getAllDataParticipant()
-                                        .get(position)
-                                        .getEmail());
+                                    .getAllDataParticipant()
+                                    .get(position)
+                                    .getEmail());
 
         city.setText(databaseHelper.getDataDao()
-                                        .getAllDataParticipant()
-                                        .get(position)
-                                        .getCity());
+                                   .getAllDataParticipant()
+                                   .get(position)
+                                   .getCity());
     }
 }

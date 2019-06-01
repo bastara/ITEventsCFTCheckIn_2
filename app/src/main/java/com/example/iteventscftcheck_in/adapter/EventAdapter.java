@@ -1,4 +1,4 @@
-package com.example.iteventscftcheck_in;
+package com.example.iteventscftcheck_in.adapter;
 
 import android.content.Context;
 
@@ -13,21 +13,19 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.iteventscftcheck_in.R;
 import com.example.iteventscftcheck_in.db.model.EventsModel;
 
 import java.util.List;
 
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
-    private List<Events> events;
-    private final Context context;
+    private Context context;
     private ItemClickListener itemClickListener;
     private List<EventsModel> eventsModels;
 
-    EventAdapter(Context context, List<EventsModel> eventsModels) {
-//        this.events = events;
+    public EventAdapter(List<EventsModel> eventsModels) {
         this.eventsModels = eventsModels;
-        this.context = context;
     }
 
 
@@ -38,6 +36,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         final TextView countText;
         final TextView descriptionText;
         final View itemBackground;
+
 
         EventViewHolder(View itemView) {
             super(itemView);
@@ -60,6 +59,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         }
     }
 
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        context = recyclerView.getContext();
+    }
+
     @NonNull
     @Override
     public EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -70,46 +75,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
     @Override
     public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
-//        String date = null;
-//        try {
-//            date = DateFormat.getDateInstance(DateFormat.MEDIUM)
-//                             .format(sdf.parse(events.get(position)
-//                                                     .getDate()
-//                                                     .getStart()));
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//
-//        List<City> listCity = events.get(position)
-//                                    .getCities();
-//
-//        String city = "";
-//
-//        for (int i = 0; i < listCity.size(); i++) {
-//            if (i != 0) {
-//                city += "\n";
-//            }
-//            city += listCity.get(i)
-//                            .getNameRus();
-//        }
-//
-//
-//        String name = events.get(position)
-//                            .getTitle();
-//        String count = events.get(position)
-//                             .getEventFormat();
-//        String description = events.get(position)
-//                                   .getDescription();
-//
-//
-
-//
-//        holder.cityText.setText(city);
-//        holder.dateText.setText(date);
-//        holder.nameText.setText(name);
-//        holder.countText.setText(count);
-//        holder.descriptionText.setText(description);
         holder.dateText.setText(eventsModels.get(position)
                                             .getDate());
         holder.cityText.setText(eventsModels.get(position)
@@ -125,7 +90,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
         Glide
                 .with(context)
-                .load("https://team.cft.ru" + eventsModels.get(position)
+                .load(context.getString(R.string.url) + eventsModels.get(position)
                                                           .getUrlBackground())
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(imageView);
@@ -142,7 +107,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
     @Override
     public int getItemCount() {
-//        return events.size();
         return eventsModels.size();
     }
 }

@@ -5,8 +5,6 @@ import androidx.room.PrimaryKey;
 
 @Entity
 
-//@Entity(foreignKeys = @ForeignKey(entity = EventsModel.class, parentColumns = "id", childColumns = "event_id"))
-
 public class ParticipantModel {
     @PrimaryKey
     private int id;
@@ -16,10 +14,6 @@ public class ParticipantModel {
     private String email;
     private String city;
     private boolean isVisited;
-
-//    @ColumnInfo(name = "event_id")
-//    public int eventId;
-
 
     public int getId() {
         return id;

@@ -2,4 +2,6 @@
     <string name="app_name">IT Events CFT Check-In</string>
     <string name="background">background</string>
     <string name="checkbox">Checkbox</string>
+    <string name="url">"https://team.cft.ru"</string>
+    <string name="DB">"database_23"</string>
 </resources>

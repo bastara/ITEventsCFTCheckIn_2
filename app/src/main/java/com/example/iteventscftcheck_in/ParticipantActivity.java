@@ -4,16 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.iteventscftcheck_in.adapter.ParticipantAdapter;
 import com.example.iteventscftcheck_in.db.DatabaseHelper;
-import com.example.iteventscftcheck_in.db.model.EventsModel;
 import com.example.iteventscftcheck_in.db.model.ParticipantModel;
+import com.example.iteventscftcheck_in.model.Members;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,8 +27,6 @@ public class ParticipantActivity extends AppCompatActivity implements Participan
     RecyclerView recyclerView;
     List<Members> members;
 
-    private DatabaseHelper databaseHelper;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,28 +34,19 @@ public class ParticipantActivity extends AppCompatActivity implements Participan
 
         members = new ArrayList<>();
 
-//        recyclerView = findViewById(R.id.recycle_view_participant);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//
-//        ParticipantAdapter adapter = new ParticipantAdapter(ParticipantActivity.this, members);
-//        adapter.setClickListener(ParticipantActivity.this);
-//        recyclerView.setAdapter(adapter);
-
-
         App.getApi()
            .getMembersId(106)
            .enqueue(new Callback<List<Members>>() {
                @Override
-               public void onResponse(Call<List<Members>> call, Response<List<Members>> response) {
-                   members.addAll(response.body());
+               public void onResponse(@NonNull Call<List<Members>> call, @NonNull Response<List<Members>> response) {
+                   members.addAll(Objects.requireNonNull(response.body()));
                    fillDB();
 //                   recyclerView.getAdapter()
 //                               .notifyDataSetChanged();
                }
 
-
                @Override
-               public void onFailure(Call<List<Members>> call, Throwable t) {
+               public void onFailure(@NonNull Call<List<Members>> call, @NonNull Throwable t) {
                    Toast.makeText(ParticipantActivity.this, "An error occurred during networking", Toast.LENGTH_SHORT)
                         .show();
                }
@@ -63,13 +55,12 @@ public class ParticipantActivity extends AppCompatActivity implements Participan
         recyclerView = findViewById(R.id.recycle_view_participant);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        databaseHelper = App.getInstance()
-                            .getDatabaseInstance();
-        ParticipantAdapter adapter = new ParticipantAdapter(ParticipantActivity.this, databaseHelper.getDataDao()
-                                                                                                    .getAllDataParticipant());
+        DatabaseHelper databaseHelper = App.getInstance()
+                                           .getDatabaseInstance();
+        ParticipantAdapter adapter = new ParticipantAdapter(databaseHelper.getDataDao()
+                                                                          .getAllDataParticipant());
         adapter.setClickListener(ParticipantActivity.this);
         recyclerView.setAdapter(adapter);
-
     }
 
     private void fillDB() {
@@ -77,7 +68,6 @@ public class ParticipantActivity extends AppCompatActivity implements Participan
                                            .getDatabaseInstance();
 
         ParticipantModel model = new ParticipantModel();
-
 
         for (int i = 0; i < members.size(); i++) {
             model.setId(members.get(i)
@@ -110,7 +100,7 @@ public class ParticipantActivity extends AppCompatActivity implements Participan
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(ParticipantActivity.this,
-                PersonalData.class);
+                PersonalDataActivity.class);
         intent.putExtra("id", String.valueOf(position));
         startActivity(intent);
     }
