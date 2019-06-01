@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.Item
     }
 
     private String getCitiesEvent(List<City> cities) {
+
         StringBuilder city = new StringBuilder();
 
         for (int j = 0; j < cities.size(); j++) {
