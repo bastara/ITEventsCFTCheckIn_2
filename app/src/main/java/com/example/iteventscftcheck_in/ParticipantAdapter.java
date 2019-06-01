@@ -10,6 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.iteventscftcheck_in.db.model.EventsModel;
+import com.example.iteventscftcheck_in.db.model.ParticipantModel;
+
 import java.util.List;
 
 class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.ParticipantViewHolder> {
@@ -17,10 +20,12 @@ class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.Partici
     private List<Members> members;
     private final Context context;
     private ItemClickListener itemClickListener;
+    private List<ParticipantModel> participantModels;
 
-    public ParticipantAdapter(Context context, List<Members> members) {
-        this.members = members;
+    public ParticipantAdapter(Context context, List<ParticipantModel> participantModels) {
+//        this.members = members;
         this.context = context;
+        this.participantModels = participantModels;
     }
 
     public class ParticipantViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -55,11 +60,9 @@ class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.Partici
 
     @Override
     public void onBindViewHolder(@NonNull ParticipantAdapter.ParticipantViewHolder holder, int position) {
-        String participantName = members.get(position)
-                                        .getLastName();
 
 
-        holder.lastName.setText(participantName);
+        holder.lastName.setText(participantModels.get(position).getFirstName());
     }
 
     public void setClickListener(ParticipantAdapter.ItemClickListener itemClickListener) {
@@ -73,6 +76,7 @@ class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.Partici
 
     @Override
     public int getItemCount() {
-        return members.size();
+//        return members.size();
+        return participantModels.size();
     }
 }

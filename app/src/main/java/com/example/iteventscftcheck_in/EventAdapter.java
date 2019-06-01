@@ -13,24 +13,20 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.iteventscftcheck_in.db.model.DataModel;
+import com.example.iteventscftcheck_in.db.model.EventsModel;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
     private List<Events> events;
     private final Context context;
     private ItemClickListener itemClickListener;
-    private List<DataModel> dataModels;
+    private List<EventsModel> eventsModels;
 
-    EventAdapter(Context context, List<DataModel> dataModels) {
+    EventAdapter(Context context, List<EventsModel> eventsModels) {
 //        this.events = events;
-        this.dataModels = dataModels;
+        this.eventsModels = eventsModels;
         this.context = context;
     }
 
@@ -114,23 +110,23 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 //        holder.nameText.setText(name);
 //        holder.countText.setText(count);
 //        holder.descriptionText.setText(description);
-        holder.dateText.setText(dataModels.get(position)
-                                          .getDate());
-        holder.cityText.setText(dataModels.get(position)
-                                          .getCity());
-        holder.nameText.setText(dataModels.get(position)
-                                          .getName());
-        holder.countText.setText(dataModels.get(position)
-                                           .getCount());
-        holder.descriptionText.setText(dataModels.get(position)
-                                                 .getDescription());
+        holder.dateText.setText(eventsModels.get(position)
+                                            .getDate());
+        holder.cityText.setText(eventsModels.get(position)
+                                            .getCity());
+        holder.nameText.setText(eventsModels.get(position)
+                                            .getName());
+        holder.countText.setText(eventsModels.get(position)
+                                             .getCount());
+        holder.descriptionText.setText(eventsModels.get(position)
+                                                   .getDescription());
 
         ImageView imageView = (ImageView) holder.itemBackground;
 
         Glide
                 .with(context)
-                .load("https://team.cft.ru" + dataModels.get(position)
-                                                        .getUrlBackground())
+                .load("https://team.cft.ru" + eventsModels.get(position)
+                                                          .getUrlBackground())
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(imageView);
 
@@ -147,6 +143,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     @Override
     public int getItemCount() {
 //        return events.size();
-        return dataModels.size();
+        return eventsModels.size();
     }
 }

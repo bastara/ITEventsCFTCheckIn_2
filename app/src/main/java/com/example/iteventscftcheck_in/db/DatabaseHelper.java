@@ -7,9 +7,10 @@ import androidx.room.InvalidationTracker;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
-import com.example.iteventscftcheck_in.db.model.DataModel;
+import com.example.iteventscftcheck_in.db.model.ParticipantModel;
+import com.example.iteventscftcheck_in.db.model.EventsModel;
 
-@Database(entities = {DataModel.class}, version = 1, exportSchema = false)
+@Database(entities = {EventsModel.class, ParticipantModel.class}, version = 1, exportSchema = false)
 public abstract class DatabaseHelper extends RoomDatabase {
 
     public abstract DataDao getDataDao();

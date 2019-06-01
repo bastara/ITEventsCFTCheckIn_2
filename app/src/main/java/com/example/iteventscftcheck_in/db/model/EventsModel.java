@@ -5,7 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class DataModel {
+public class EventsModel {
 
     @NonNull
     @PrimaryKey
@@ -74,3 +74,5 @@ public class DataModel {
         this.urlBackground = urlBackground;
     }
 }
+
+

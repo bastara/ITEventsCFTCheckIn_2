@@ -23,11 +23,15 @@
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes />
+    <loaded-nodes>
+      <connection connection-id="50291391-d251-4887-8530-a79906107130">
+        <schema name="main" object-types="table, view" />
+      </connection>
+    </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="50291391-d251-4887-8530-a79906107130">
-      <console name="Connection" type="STANDARD" schema="main" session="Main"><![CDATA[select * from "DataModel"]]></console>
+      <console name="Connection" type="STANDARD" schema="main" session="Main">select * from &quot;DataModel&quot;</console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
@@ -77,7 +81,7 @@
           <port value="" />
           <database value="" />
           <files>
-            <file path="C:\Users\Shurik\Documents\AndroidStudio\DeviceExplorer\vertex-impress_open-0123456789ABCDEF\data\data\com.example.iteventscftcheck_in\databases\database_9" schema="main" />
+            <file path="C:\Users\Shurik\Documents\AndroidStudio\DeviceExplorer\0123456789ABCDEF\data\data\com.example.iteventscftcheck_in\databases\database_20" schema="main" />
           </files>
           <os-authentication value="false" />
           <empty-authentication value="false" />

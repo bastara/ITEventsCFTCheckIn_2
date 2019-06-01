@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.example.iteventscftcheck_in.db.DatabaseHelper;
-import com.example.iteventscftcheck_in.db.model.DataModel;
+import com.example.iteventscftcheck_in.db.model.EventsModel;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -35,15 +35,15 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.Item
 
         events = new ArrayList<>();
 
-        recyclerView = findViewById(R.id.recycle_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        databaseHelper = App.getInstance()
-                            .getDatabaseInstance();
-        EventAdapter adapter = new EventAdapter(this, databaseHelper.getDataDao()
-                                                                    .getAllData());
-        adapter.setClickListener(MainActivity.this);
-        recyclerView.setAdapter(adapter);
+//        recyclerView = findViewById(R.id.recycle_view);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//
+//        databaseHelper = App.getInstance()
+//                            .getDatabaseInstance();
+//        EventAdapter adapter = new EventAdapter(this, databaseHelper.getDataDao()
+//                                                                    .getAllData());
+//        adapter.setClickListener(MainActivity.this);
+//        recyclerView.setAdapter(adapter);
 
 
         App.getApi()
@@ -63,13 +63,23 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.Item
                         .show();
                }
            });
+
+        recyclerView = findViewById(R.id.recycle_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        databaseHelper = App.getInstance()
+                            .getDatabaseInstance();
+        EventAdapter adapter = new EventAdapter(this, databaseHelper.getDataDao()
+                                                                    .getAllData());
+        adapter.setClickListener(MainActivity.this);
+        recyclerView.setAdapter(adapter);
     }
 
     private void fillDB() {
         DatabaseHelper databaseHelper = App.getInstance()
                                            .getDatabaseInstance();
 
-        DataModel model = new DataModel();
+        EventsModel model = new EventsModel();
 
 
         for (int i = 0; i < events.size(); i++) {
@@ -119,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.Item
                                          .getCardImage());
 
             databaseHelper.getDataDao()
-                          .insert(model);
+                          .insertEvents(model);
         }
     }
 

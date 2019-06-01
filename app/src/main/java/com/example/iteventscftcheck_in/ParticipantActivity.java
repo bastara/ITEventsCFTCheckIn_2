@@ -8,6 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.iteventscftcheck_in.db.DatabaseHelper;
+import com.example.iteventscftcheck_in.db.model.EventsModel;
+import com.example.iteventscftcheck_in.db.model.ParticipantModel;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +24,8 @@ public class ParticipantActivity extends AppCompatActivity implements Participan
     RecyclerView recyclerView;
     List<Members> members;
 
+    private DatabaseHelper databaseHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,12 +33,12 @@ public class ParticipantActivity extends AppCompatActivity implements Participan
 
         members = new ArrayList<>();
 
-        recyclerView = findViewById(R.id.recycle_view_participant);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        ParticipantAdapter adapter = new ParticipantAdapter(ParticipantActivity.this, members);
-        adapter.setClickListener(ParticipantActivity.this);
-        recyclerView.setAdapter(adapter);
+//        recyclerView = findViewById(R.id.recycle_view_participant);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//
+//        ParticipantAdapter adapter = new ParticipantAdapter(ParticipantActivity.this, members);
+//        adapter.setClickListener(ParticipantActivity.this);
+//        recyclerView.setAdapter(adapter);
 
 
         App.getApi()
@@ -41,8 +47,9 @@ public class ParticipantActivity extends AppCompatActivity implements Participan
                @Override
                public void onResponse(Call<List<Members>> call, Response<List<Members>> response) {
                    members.addAll(response.body());
-                   recyclerView.getAdapter()
-                               .notifyDataSetChanged();
+                   fillDB();
+//                   recyclerView.getAdapter()
+//                               .notifyDataSetChanged();
                }
 
 
@@ -52,6 +59,51 @@ public class ParticipantActivity extends AppCompatActivity implements Participan
                         .show();
                }
            });
+
+        recyclerView = findViewById(R.id.recycle_view_participant);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        databaseHelper = App.getInstance()
+                            .getDatabaseInstance();
+        ParticipantAdapter adapter = new ParticipantAdapter(ParticipantActivity.this, databaseHelper.getDataDao().getAllDataParticipant());
+        adapter.setClickListener(ParticipantActivity.this);
+        recyclerView.setAdapter(adapter);
+
+    }
+
+    private void fillDB() {
+        DatabaseHelper databaseHelper = App.getInstance()
+                                           .getDatabaseInstance();
+
+        ParticipantModel model = new ParticipantModel();
+
+
+        for (int i = 0; i < members.size(); i++) {
+            model.setId(members.get(i)
+                               .getId());
+
+            if (databaseHelper.getDataDao()
+                              .getParticipantById(model.getId())
+                              .size() == 1) {
+
+                continue;
+            }
+
+            model.setFirstName(members.get(i)
+                                      .getFirstName());
+            model.setLastName(members.get(i)
+                                     .getLastName());
+            model.setPhone(members.get(i)
+                                  .getPhone());
+            model.setEmail(members.get(i)
+                                  .getEmail());
+            model.setCity(members.get(i)
+                                 .getCity());
+            model.setVisited(members.get(i)
+                                    .getIsVisited());
+            databaseHelper.getDataDao()
+                          .insertParticipant(model);
+        }
     }
 
     @Override
