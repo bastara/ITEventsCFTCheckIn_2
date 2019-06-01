@@ -24,6 +24,8 @@
         </activity>
         <activity
             android:name=".ParticipantActivity" />
+        <activity
+            android:name=".PersonalData" />
     </application>
 
 </manifest>

@@ -65,7 +65,8 @@ public class ParticipantActivity extends AppCompatActivity implements Participan
 
         databaseHelper = App.getInstance()
                             .getDatabaseInstance();
-        ParticipantAdapter adapter = new ParticipantAdapter(ParticipantActivity.this, databaseHelper.getDataDao().getAllDataParticipant());
+        ParticipantAdapter adapter = new ParticipantAdapter(ParticipantActivity.this, databaseHelper.getDataDao()
+                                                                                                    .getAllDataParticipant());
         adapter.setClickListener(ParticipantActivity.this);
         recyclerView.setAdapter(adapter);
 
@@ -84,7 +85,7 @@ public class ParticipantActivity extends AppCompatActivity implements Participan
 
             if (databaseHelper.getDataDao()
                               .getParticipantById(model.getId())
-                              .size() == 1) {
+                    != null) {
 
                 continue;
             }

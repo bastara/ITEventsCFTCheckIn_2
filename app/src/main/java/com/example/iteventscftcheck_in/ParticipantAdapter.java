@@ -5,11 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.iteventscftcheck_in.db.DatabaseHelper;
 import com.example.iteventscftcheck_in.db.model.EventsModel;
 import com.example.iteventscftcheck_in.db.model.ParticipantModel;
 
@@ -17,18 +20,24 @@ import java.util.List;
 
 class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.ParticipantViewHolder> {
 
-    private List<Members> members;
     private final Context context;
     private ItemClickListener itemClickListener;
     private List<ParticipantModel> participantModels;
 
+    private ParticipantModel participantModelEntity;
+
+    DatabaseHelper databaseHelper = App.getInstance()
+                                       .getDatabaseInstance();
+
+
     public ParticipantAdapter(Context context, List<ParticipantModel> participantModels) {
-//        this.members = members;
         this.context = context;
         this.participantModels = participantModels;
     }
 
-    public class ParticipantViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ParticipantViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
+//            , CompoundButton.OnCheckedChangeListener
+    {
         final TextView lastName;
         final CheckBox checkBox;
 
@@ -59,10 +68,33 @@ class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.Partici
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ParticipantAdapter.ParticipantViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ParticipantAdapter.ParticipantViewHolder holder, final int position) {
+        holder.lastName.setText(participantModels.get(position)
+                                                 .getLastName());
 
+        holder.checkBox.setOnCheckedChangeListener(null);
 
-        holder.lastName.setText(participantModels.get(position).getFirstName());
+        holder.checkBox.setChecked(participantModels.get(position)
+                                                    .isVisited());
+
+        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                participantModelEntity = participantModels.get(holder.getAdapterPosition());
+
+                if (participantModels.get(holder.getAdapterPosition())
+                                     .isVisited()) {
+//                    participantModels.get(holder.getAdapterPosition())
+//                                     .setVisited(false);
+                    participantModelEntity.setVisited(false);
+                } else {
+//                    participantModels.get(holder.getAdapterPosition()).setVisited(true);
+                    participantModelEntity.setVisited(true);
+                }
+                databaseHelper.getDataDao()
+                              .update(participantModelEntity);
+            }
+        });
     }
 
     public void setClickListener(ParticipantAdapter.ItemClickListener itemClickListener) {

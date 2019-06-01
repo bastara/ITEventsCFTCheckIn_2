@@ -1,5 +1,6 @@
 package com.example.iteventscftcheck_in;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -7,13 +8,17 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.iteventscftcheck_in.db.DatabaseHelper;
+
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-class PersonalData extends AppCompatActivity {
+public class PersonalData extends AppCompatActivity {
+
+    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,5 +31,34 @@ class PersonalData extends AppCompatActivity {
         TextView email = findViewById(R.id.tv_email);
         TextView city = findViewById(R.id.tv_city);
 
+        Intent intent = getIntent();
+        int position = Integer.parseInt(intent.getStringExtra("id"));
+
+        databaseHelper = App.getInstance()
+                            .getDatabaseInstance();
+        firstName.setText(databaseHelper.getDataDao()
+                                        .getAllDataParticipant()
+                                        .get(position)
+                                        .getFirstName());
+
+        lastName.setText(databaseHelper.getDataDao()
+                                        .getAllDataParticipant()
+                                        .get(position)
+                                        .getLastName());
+
+        phone.setText(databaseHelper.getDataDao()
+                                        .getAllDataParticipant()
+                                        .get(position)
+                                        .getPhone());
+
+        email.setText(databaseHelper.getDataDao()
+                                        .getAllDataParticipant()
+                                        .get(position)
+                                        .getEmail());
+
+        city.setText(databaseHelper.getDataDao()
+                                        .getAllDataParticipant()
+                                        .get(position)
+                                        .getCity());
     }
 }
