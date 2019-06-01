@@ -15,6 +15,7 @@ public class DataModel {
     private String name;
     private String count = "52/17";
     private String description;
+    private String urlBackground;
 
     @NonNull
     public int getId() {
@@ -63,5 +64,13 @@ public class DataModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getUrlBackground() {
+        return urlBackground;
+    }
+
+    public void setUrlBackground(String urlBackground) {
+        this.urlBackground = urlBackground;
     }
 }

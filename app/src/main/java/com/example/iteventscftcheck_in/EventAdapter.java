@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.iteventscftcheck_in.db.model.DataModel;
 
 import java.text.DateFormat;
@@ -40,7 +41,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         final TextView nameText;
         final TextView countText;
         final TextView descriptionText;
-//        final View itemBackground;
+        final View itemBackground;
 
         EventViewHolder(View itemView) {
             super(itemView);
@@ -50,7 +51,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             nameText = itemView.findViewById(R.id.tv_name);
             countText = itemView.findViewById(R.id.tv_count);
             descriptionText = itemView.findViewById(R.id.tv_decription);
-//            itemBackground = itemView.findViewById(R.id.icon);
+            itemBackground = itemView.findViewById(R.id.icon);
 
             itemView.setOnClickListener(this);
         }
@@ -106,13 +107,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 //                                   .getDescription();
 //
 //
-//        ImageView imageView = (ImageView) holder.itemBackground;
-//
-//        Glide
-//                .with(context)
-//                .load("https://team.cft.ru" + events.get(position)
-//                                                    .getCardImage())
-//                .into(imageView);
+
 //
 //        holder.cityText.setText(city);
 //        holder.dateText.setText(date);
@@ -129,6 +124,16 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                                            .getCount());
         holder.descriptionText.setText(dataModels.get(position)
                                                  .getDescription());
+
+        ImageView imageView = (ImageView) holder.itemBackground;
+
+        Glide
+                .with(context)
+                .load("https://team.cft.ru" + dataModels.get(position)
+                                                        .getUrlBackground())
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .into(imageView);
+
     }
 
     public void setClickListener(ItemClickListener itemClickListener) {

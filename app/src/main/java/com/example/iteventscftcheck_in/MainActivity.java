@@ -38,8 +38,10 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.Item
         recyclerView = findViewById(R.id.recycle_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        databaseHelper = App.getInstance().getDatabaseInstance();
-        EventAdapter adapter = new EventAdapter(this,  databaseHelper.getDataDao().getAllData());
+        databaseHelper = App.getInstance()
+                            .getDatabaseInstance();
+        EventAdapter adapter = new EventAdapter(this, databaseHelper.getDataDao()
+                                                                    .getAllData());
         adapter.setClickListener(MainActivity.this);
         recyclerView.setAdapter(adapter);
 
@@ -51,8 +53,8 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.Item
                public void onResponse(Call<List<Events>> call, Response<List<Events>> response) {
                    events.addAll(response.body());
                    fillDB();
-//                   recyclerView.getAdapter()
-//                               .notifyDataSetChanged();
+                   recyclerView.getAdapter()
+                               .notifyDataSetChanged();
                }
 
                @Override
@@ -112,6 +114,9 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.Item
 
             model.setDescription(events.get(i)
                                        .getDescription());
+
+            model.setUrlBackground(events.get(i)
+                                         .getCardImage());
 
             databaseHelper.getDataDao()
                           .insert(model);

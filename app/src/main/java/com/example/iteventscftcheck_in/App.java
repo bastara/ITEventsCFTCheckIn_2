@@ -33,7 +33,7 @@ public class App extends Application {
         teamCFTAPI = retrofit.create(TeamCFTAPI.class);
 
         instance = this;
-        db = Room.databaseBuilder(getApplicationContext(), DatabaseHelper.class, "database_16")
+        db = Room.databaseBuilder(getApplicationContext(), DatabaseHelper.class, "database_17")
                  .allowMainThreadQueries()
                  .build();
     }
