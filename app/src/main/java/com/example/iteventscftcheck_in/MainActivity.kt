@@ -98,7 +98,6 @@ class MainActivity : AppCompatActivity(), EventAdapter.ItemClickListener {
     }
 
     private fun getCitiesEvent(cities: List<City>): String {
-
         val city = StringBuilder()
 
         for (j in cities.indices) {
@@ -120,7 +119,6 @@ class MainActivity : AppCompatActivity(), EventAdapter.ItemClickListener {
         } catch (e: ParseException) {
             e.printStackTrace()
         }
-
         return date
     }
 
