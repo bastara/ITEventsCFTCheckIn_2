@@ -41,8 +41,7 @@ class MainActivity : AppCompatActivity(), EventAdapter.ItemClickListener {
                     override fun onResponse(call: Call<List<Events>>, response: Response<List<Events>>) {
                         events.addAll(Objects.requireNonNull<List<Events>>(response.body()))
                         fillDB()
-                        //                   recyclerView.getAdapter()
-                        //                               .notifyDataSetChanged();
+                        recyclerView.adapter?.notifyDataSetChanged()
                     }
 
                     override fun onFailure(call: Call<List<Events>>, t: Throwable) {
@@ -81,12 +80,11 @@ class MainActivity : AppCompatActivity(), EventAdapter.ItemClickListener {
             model.name = events[i]
                     .title
 
-            model.date = getDateEvent(events[i]
-                    .date
-                    .start)
+            model.date = events[i]
+                    .date?.start?.let { getDateEvent(it) }
 
-            model.city = getCitiesEvent(events[i]
-                    .cities)
+            model.city = events[i]
+                    .cities?.let { getCitiesEvent(it) }
 
             model.description = events[i]
                     .description
@@ -110,7 +108,7 @@ class MainActivity : AppCompatActivity(), EventAdapter.ItemClickListener {
             city.append(cities[j]
                     .nameRus)
         }
-        return cities.toString()
+        return city.toString()
     }
 
     private fun getDateEvent(day: String): String? {

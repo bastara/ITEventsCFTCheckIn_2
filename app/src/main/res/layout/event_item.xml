@@ -32,6 +32,8 @@
             android:layout_marginTop="@dimen/dp_16"
             android:textColor="@color/cardview_light_background"
             android:textSize="@dimen/sp_20"
+            android:shadowColor="@color/black"
+            android:shadowRadius="@dimen/shadow_radius"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -43,6 +45,8 @@
             android:textAlignment="viewEnd"
             android:textColor="@color/cardview_light_background"
             android:textSize="@dimen/sp_20"
+            android:shadowColor="@color/black"
+            android:shadowRadius="@dimen/shadow_radius"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_date" />
 
@@ -54,6 +58,8 @@
             android:textAlignment="viewEnd"
             android:textColor="@color/cardview_light_background"
             android:textSize="@dimen/sp_20"
+            android:shadowColor="@color/black"
+            android:shadowRadius="@dimen/shadow_radius"
             app:layout_constraintBottom_toBottomOf="@+id/tv_name"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -79,6 +85,4 @@
         android:layout_marginStart="@dimen/dp_16"
         android:layout_marginTop="@dimen/dp_8"
         android:textSize="@dimen/sp_12" />
-
-
 </LinearLayout>
