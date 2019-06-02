@@ -13,8 +13,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.iteventscftcheck_in.App;
 import com.example.iteventscftcheck_in.R;
+import com.example.iteventscftcheck_in.db.DatabaseHelper;
 import com.example.iteventscftcheck_in.db.model.EventsModel;
+import com.example.iteventscftcheck_in.db.model.ParticipantModel;
 
 import java.util.List;
 
@@ -79,20 +82,38 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                                             .getCity());
         holder.nameText.setText(eventsModels.get(position)
                                             .getName());
-        holder.countText.setText(eventsModels.get(position)
-                                             .getCount());
         holder.descriptionText.setText(eventsModels.get(position)
                                                    .getDescription());
+        holder.countText.setText(getCount());
 
         ImageView imageView = (ImageView) holder.itemBackground;
 
         Glide
                 .with(context)
                 .load(context.getString(R.string.url) + eventsModels.get(position)
-                                                          .getUrlBackground())
+                                                                    .getUrlBackground())
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(imageView);
 
+    }
+
+    private String getCount() {
+        DatabaseHelper databaseHelper = App.getInstance()
+                                           .getDatabaseInstance();
+        int members = databaseHelper.getDataDao()
+                                    .getAllDataParticipant()
+                                    .size();
+        int participant = 0;
+
+        for (int i = 0; i < members; i++) {
+            ParticipantModel participantModel = databaseHelper.getDataDao()
+                                                              .getAllDataParticipant()
+                                                              .get(i);
+            if (participantModel.isVisited()) {
+                participant++;
+            }
+        }
+        return members + "/" + participant;
     }
 
     public void setClickListener(ItemClickListener itemClickListener) {

@@ -7,7 +7,6 @@ import androidx.room.PrimaryKey;
 @Entity
 public class EventsModel {
 
-    @NonNull
     @PrimaryKey
     private int id;
     private String date;
@@ -17,12 +16,11 @@ public class EventsModel {
     private String description;
     private String urlBackground;
 
-    @NonNull
     public int getId() {
         return id;
     }
 
-    public void setId(@NonNull int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
