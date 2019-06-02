@@ -1,4 +1,4 @@
-package com.example.iteventscftcheck_in.adapter;
+package com.example.iteventscftcheck_in.ui.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -27,7 +27,6 @@ public class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.
     private DatabaseHelper databaseHelper = App.getInstance()
                                                .getDatabaseInstance();
 
-
     public ParticipantAdapter(List<ParticipantModel> participantModels) {
         this.participantModels = participantModels;
     }
@@ -52,7 +51,6 @@ public class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.
             }
         }
     }
-
 
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -98,7 +96,6 @@ public class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.
     public void setClickListener(ParticipantAdapter.ItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
-
 
     public interface ItemClickListener {
         void onItemClick(int position);

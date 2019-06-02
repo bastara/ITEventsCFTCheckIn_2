@@ -1,4 +1,4 @@
-package com.example.iteventscftcheck_in.adapter;
+package com.example.iteventscftcheck_in.ui.adapter;
 
 import android.content.Context;
 
@@ -28,7 +28,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         this.eventsModels = eventsModels;
     }
 
-
     class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final TextView dateText;
         final TextView cityText;
@@ -37,7 +36,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         final TextView descriptionText;
         final View itemBackground;
 
-
         EventViewHolder(View itemView) {
             super(itemView);
 
@@ -45,7 +43,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             dateText = itemView.findViewById(R.id.tv_date);
             nameText = itemView.findViewById(R.id.tv_name);
             countText = itemView.findViewById(R.id.tv_count);
-            descriptionText = itemView.findViewById(R.id.tv_decription);
+            descriptionText = itemView.findViewById(R.id.tv_description);
             itemBackground = itemView.findViewById(R.id.icon);
 
             itemView.setOnClickListener(this);

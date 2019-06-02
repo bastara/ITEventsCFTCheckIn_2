@@ -1,4 +1,4 @@
-package com.example.iteventscftcheck_in;
+package com.example.iteventscftcheck_in.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.iteventscftcheck_in.adapter.ParticipantAdapter;
+import com.example.iteventscftcheck_in.App;
+import com.example.iteventscftcheck_in.R;
+import com.example.iteventscftcheck_in.ui.adapter.ParticipantAdapter;
 import com.example.iteventscftcheck_in.db.DatabaseHelper;
 import com.example.iteventscftcheck_in.db.model.ParticipantModel;
 import com.example.iteventscftcheck_in.model.Members;

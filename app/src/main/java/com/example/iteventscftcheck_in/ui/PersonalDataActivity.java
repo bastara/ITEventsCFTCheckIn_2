@@ -1,4 +1,4 @@
-package com.example.iteventscftcheck_in;
+package com.example.iteventscftcheck_in.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.iteventscftcheck_in.App;
+import com.example.iteventscftcheck_in.R;
 import com.example.iteventscftcheck_in.db.DatabaseHelper;
 
 public class PersonalDataActivity extends AppCompatActivity {

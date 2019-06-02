@@ -9,11 +9,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.example.iteventscftcheck_in.adapter.EventAdapter;
+import com.example.iteventscftcheck_in.ui.adapter.EventAdapter;
 import com.example.iteventscftcheck_in.db.DatabaseHelper;
 import com.example.iteventscftcheck_in.db.model.EventsModel;
 import com.example.iteventscftcheck_in.model.City;
 import com.example.iteventscftcheck_in.model.Events;
+import com.example.iteventscftcheck_in.ui.ParticipantActivity;
 
 import java.text.DateFormat;
 import java.text.ParseException;
