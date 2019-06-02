@@ -22,14 +22,11 @@ internal class EventAdapter(private val eventsModels: List<EventsModel>) : Recyc
 
     private val count: String
         get() {
-            val databaseHelper = App.getInstance()
-                    .databaseInstance
-            val members = databaseHelper.dataDao
-                    .allDataParticipant
-                    .size
+            val databaseHelper = App.instance?.databaseInstance
+            val members = databaseHelper?.dataDao?.allDataParticipant?.size
             var participant = 0
 
-            for (i in 0 until members) {
+            for (i in 0 until members!!) {
                 val participantModel = databaseHelper.dataDao
                         .allDataParticipant[i]
                 if (participantModel.isVisited) {

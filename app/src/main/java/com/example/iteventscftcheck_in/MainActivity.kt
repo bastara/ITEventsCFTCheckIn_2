@@ -15,7 +15,6 @@ import com.example.iteventscftcheck_in.model.Events
 import com.example.iteventscftcheck_in.ui.ParticipantActivity
 
 import java.text.DateFormat
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.ArrayList
 import java.util.Locale
@@ -35,35 +34,30 @@ class MainActivity : AppCompatActivity(), EventAdapter.ItemClickListener {
 
         events = ArrayList()
 
-        App.getApi()
-                .allPosts
-                .enqueue(object : Callback<List<Events>> {
-                    override fun onResponse(call: Call<List<Events>>, response: Response<List<Events>>) {
-                        events.addAll(Objects.requireNonNull<List<Events>>(response.body()))
-                        fillDB()
-                        recyclerView.adapter?.notifyDataSetChanged()
-                    }
+        App.api?.allPosts?.enqueue(object : Callback<List<Events>> {
+            override fun onResponse(call: Call<List<Events>>, response: Response<List<Events>>) {
+                events.addAll(Objects.requireNonNull<List<Events>>(response.body()))
+                fillDB()
+                recyclerView.adapter?.notifyDataSetChanged()
+            }
 
-                    override fun onFailure(call: Call<List<Events>>, t: Throwable) {
-                        Toast.makeText(this@MainActivity, "An error occurred during networking", Toast.LENGTH_SHORT)
-                                .show()
-                    }
-                })
+            override fun onFailure(call: Call<List<Events>>, t: Throwable) {
+                Toast.makeText(this@MainActivity, "An error occurred during networking", Toast.LENGTH_SHORT)
+                        .show()
+            }
+        })
 
         recyclerView = findViewById(R.id.recycle_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val databaseHelper = App.getInstance()
-                .databaseInstance
-        val adapter = EventAdapter(databaseHelper.dataDao
-                .allData)
-        adapter.setClickListener(this@MainActivity)
+        val databaseHelper = App.instance?.databaseInstance
+        val adapter = databaseHelper?.dataDao?.allData?.let { EventAdapter(it) }
+        adapter?.setClickListener(this@MainActivity)
         recyclerView.adapter = adapter
     }
 
     private fun fillDB() {
-        val databaseHelper = App.getInstance()
-                .databaseInstance
+        val databaseHelper = App.instance?.databaseInstance
 
         val model = EventsModel()
 
@@ -71,10 +65,12 @@ class MainActivity : AppCompatActivity(), EventAdapter.ItemClickListener {
             model.id = events[i]
                     .id!!
 
-            if (databaseHelper.dataDao
-                            .getDataById(model.id)
-                            .size == 1) {
-                continue
+            if (databaseHelper != null) {
+                if (databaseHelper.dataDao
+                                .getDataById(model.id)
+                                .size == 1) {
+                    continue
+                }
             }
 
             model.name = events[i]
@@ -92,7 +88,7 @@ class MainActivity : AppCompatActivity(), EventAdapter.ItemClickListener {
             model.urlBackground = events[i]
                     .cardImage
 
-            databaseHelper.dataDao
+            databaseHelper!!.dataDao
                     .insertEvents(model)
         }
     }
@@ -112,14 +108,8 @@ class MainActivity : AppCompatActivity(), EventAdapter.ItemClickListener {
 
     private fun getDateEvent(day: String): String? {
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
-        var date: String? = null
-        try {
-            date = DateFormat.getDateInstance(DateFormat.MEDIUM)
-                    .format(sdf.parse(day))
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
-        return date
+        return DateFormat.getDateInstance(DateFormat.MEDIUM)
+                .format(sdf.parse(day))
     }
 
     override fun onItemClick(position: Int) {

@@ -22,7 +22,7 @@ import retrofit2.Response
 
 class ParticipantActivity : AppCompatActivity(), ParticipantAdapter.ItemClickListener {
 
-    internal lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerView: RecyclerView
     internal lateinit var members: MutableList<Members>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,63 +31,59 @@ class ParticipantActivity : AppCompatActivity(), ParticipantAdapter.ItemClickLis
 
         members = ArrayList()
 
-        App.getApi()
-                .getMembersId(106)
-                .enqueue(object : Callback<List<Members>> {
-                    override fun onResponse(call: Call<List<Members>>, response: Response<List<Members>>) {
-                        members.addAll(Objects.requireNonNull<List<Members>>(response.body()))
-                        fillDB()
-                    }
+        App.api?.getMembersId(106)?.enqueue(object : Callback<List<Members>> {
+            override fun onResponse(call: Call<List<Members>>, response: Response<List<Members>>) {
+                members.addAll(Objects.requireNonNull<List<Members>>(response.body()))
+                fillDB()
+            }
 
-                    override fun onFailure(call: Call<List<Members>>, t: Throwable) {
-                        Toast.makeText(this@ParticipantActivity, "An error occurred during networking", Toast.LENGTH_SHORT)
-                                .show()
-                    }
-                })
+            override fun onFailure(call: Call<List<Members>>, t: Throwable) {
+                Toast.makeText(this@ParticipantActivity, "An error occurred during networking", Toast.LENGTH_SHORT)
+                        .show()
+            }
+        })
 
         recyclerView = findViewById(R.id.recycle_view_participant)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val databaseHelper = App.getInstance()
-                .databaseInstance
-        val adapter = ParticipantAdapter(databaseHelper.dataDao
-                .allDataParticipant)
+        val databaseHelper = App.instance?.databaseInstance
+        val adapter = ParticipantAdapter(databaseHelper!!.dataDao.allDataParticipant)
         adapter.setClickListener(this@ParticipantActivity)
         recyclerView.adapter = adapter
     }
 
     private fun fillDB() {
-        val databaseHelper = App.getInstance()
-                .databaseInstance
+        val databaseHelper = App.instance?.databaseInstance
 
-        val model = ParticipantModel()
+        if (databaseHelper != null) {
+            val model = ParticipantModel()
 
-        for (i in members.indices) {
-            model.id = members[i]
-                    .id!!
+            for (i in members.indices) {
+                model.id = members[i]
+                        .id!!
 
-            @Suppress("SENSELESS_COMPARISON")
-            if (databaseHelper.dataDao
-                            .getParticipantById(model.id) != null) {
-                continue
+                @Suppress("SENSELESS_COMPARISON")
+                if (databaseHelper.dataDao
+                                .getParticipantById(model.id) != null) {
+                    continue
+                }
+
+                model.firstName = members[i]
+                        .firstName
+                model.lastName = members[i]
+                        .lastName
+                model.phone = members[i]
+                        .phone
+                model.email = members[i]
+                        .email
+                model.city = members[i]
+                        .city
+                model.isVisited = members[i]
+                        .getIsVisited()!!
+                databaseHelper.dataDao
+                        .insertParticipant(model)
             }
-
-            model.firstName = members[i]
-                    .firstName
-            model.lastName = members[i]
-                    .lastName
-            model.phone = members[i]
-                    .phone
-            model.email = members[i]
-                    .email
-            model.city = members[i]
-                    .city
-            model.isVisited = members[i]
-                    .getIsVisited()!!
-            databaseHelper.dataDao
-                    .insertParticipant(model)
         }
-
     }
 
     override fun onItemClick(position: Int) {
