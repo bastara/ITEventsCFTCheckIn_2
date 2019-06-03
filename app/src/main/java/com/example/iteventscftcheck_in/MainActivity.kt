@@ -44,8 +44,8 @@ class MainActivity : AppCompatActivity(), EventAdapter.ItemClickListener {
 
 
         //на яве работает, здесь не успел довести до умв.
-//        App.api?.getAllEvents()?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())?.subscribe(Consumer<List<Events>> { eventss ->
-//            events.addAll(eventss)
+//        App.api?.getAllEvents()?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())?.subscribe(Consumer<List<Events>> { events ->
+//            events.addAll(events)
 //            if (fillDB()) {
 //                adapter?.refreshData(databaseHelper.dataDao
 //                        .allData)
