@@ -31,18 +31,6 @@ class ParticipantActivity : AppCompatActivity(), ParticipantAdapter.ItemClickLis
 
         members = ArrayList()
 
-        App.api?.getMembersId(106)?.enqueue(object : Callback<List<Members>> {
-            override fun onResponse(call: Call<List<Members>>, response: Response<List<Members>>) {
-                members.addAll(Objects.requireNonNull<List<Members>>(response.body()))
-                fillDB()
-            }
-
-            override fun onFailure(call: Call<List<Members>>, t: Throwable) {
-                Toast.makeText(this@ParticipantActivity, "An error occurred during networking", Toast.LENGTH_SHORT)
-                        .show()
-            }
-        })
-
         recyclerView = findViewById(R.id.recycle_view_participant)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -50,10 +38,26 @@ class ParticipantActivity : AppCompatActivity(), ParticipantAdapter.ItemClickLis
         val adapter = ParticipantAdapter(databaseHelper!!.dataDao.allDataParticipant)
         adapter.setClickListener(this@ParticipantActivity)
         recyclerView.adapter = adapter
+
+        App.api?.getMembersId(106)?.enqueue(object : Callback<List<Members>> {
+            override fun onResponse(call: Call<List<Members>>, response: Response<List<Members>>) {
+                members.addAll(Objects.requireNonNull<List<Members>>(response.body()))
+                if (fillDB()) {
+                    adapter.refreshData(databaseHelper.dataDao
+                            .allDataParticipant)
+                }
+            }
+
+            override fun onFailure(call: Call<List<Members>>, t: Throwable) {
+                Toast.makeText(this@ParticipantActivity, "An error occurred during networking", Toast.LENGTH_SHORT)
+                        .show()
+            }
+        })
     }
 
-    private fun fillDB() {
+    private fun fillDB(): Boolean {
         val databaseHelper = App.instance?.databaseInstance
+        var checkChange = false
 
         if (databaseHelper != null) {
             val model = ParticipantModel()
@@ -67,6 +71,8 @@ class ParticipantActivity : AppCompatActivity(), ParticipantAdapter.ItemClickLis
                                 .getParticipantById(model.id) != null) {
                     continue
                 }
+
+                checkChange = true
 
                 model.firstName = members[i]
                         .firstName
@@ -84,6 +90,7 @@ class ParticipantActivity : AppCompatActivity(), ParticipantAdapter.ItemClickLis
                         .insertParticipant(model)
             }
         }
+        return checkChange
     }
 
     override fun onItemClick(position: Int) {

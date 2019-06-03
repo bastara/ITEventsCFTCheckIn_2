@@ -34,19 +34,6 @@ class MainActivity : AppCompatActivity(), EventAdapter.ItemClickListener {
 
         events = ArrayList()
 
-        App.api?.allPosts?.enqueue(object : Callback<List<Events>> {
-            override fun onResponse(call: Call<List<Events>>, response: Response<List<Events>>) {
-                events.addAll(Objects.requireNonNull<List<Events>>(response.body()))
-                fillDB()
-                recyclerView.adapter?.notifyDataSetChanged()
-            }
-
-            override fun onFailure(call: Call<List<Events>>, t: Throwable) {
-                Toast.makeText(this@MainActivity, "An error occurred during networking", Toast.LENGTH_SHORT)
-                        .show()
-            }
-        })
-
         recyclerView = findViewById(R.id.recycle_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -54,10 +41,36 @@ class MainActivity : AppCompatActivity(), EventAdapter.ItemClickListener {
         val adapter = databaseHelper?.dataDao?.allData?.let { EventAdapter(it) }
         adapter?.setClickListener(this@MainActivity)
         recyclerView.adapter = adapter
+
+
+        //на яве работает, здесь не успел довести до умв.
+//        App.api?.getAllEvents()?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())?.subscribe(Consumer<List<Events>> { eventss ->
+//            events.addAll(eventss)
+//            if (fillDB()) {
+//                adapter?.refreshData(databaseHelper.dataDao
+//                        .allData)
+//            }
+//        })
+
+        App.api?.allPosts?.enqueue(object : Callback<List<Events>> {
+            override fun onResponse(call: Call<List<Events>>, response: Response<List<Events>>) {
+                events.addAll(Objects.requireNonNull<List<Events>>(response.body()))
+                if (fillDB()) {
+                    adapter?.refreshData(databaseHelper.dataDao
+                            .allData)
+                }
+            }
+
+            override fun onFailure(call: Call<List<Events>>, t: Throwable) {
+                Toast.makeText(this@MainActivity, "An error occurred during networking", Toast.LENGTH_SHORT)
+                        .show()
+            }
+        })
     }
 
-    private fun fillDB() {
+    private fun fillDB(): Boolean {
         val databaseHelper = App.instance?.databaseInstance
+        var checkChange = false
 
         val model = EventsModel()
 
@@ -73,14 +86,17 @@ class MainActivity : AppCompatActivity(), EventAdapter.ItemClickListener {
                 }
             }
 
+            checkChange = true
+
             model.name = events[i]
                     .title
 
             model.date = events[i]
-                    .date?.start?.let { getDateEvent(it) }
+                    .date!!
+                    .start?.let { getDateEvent(it) }
 
-            model.city = events[i]
-                    .cities?.let { getCitiesEvent(it) }
+            model.city = getCitiesEvent(events[i]
+                    .cities!!)
 
             model.description = events[i]
                     .description
@@ -91,6 +107,7 @@ class MainActivity : AppCompatActivity(), EventAdapter.ItemClickListener {
             databaseHelper!!.dataDao
                     .insertEvents(model)
         }
+        return checkChange
     }
 
     private fun getCitiesEvent(cities: List<City>): String {

@@ -11,8 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.iteventscftcheck_in.App
 import com.example.iteventscftcheck_in.R
 import com.example.iteventscftcheck_in.db.model.ParticipantModel
+import rx.plugins.RxJavaHooks.clear
 
-class ParticipantAdapter(private val participantModels: List<ParticipantModel>) : RecyclerView.Adapter<ParticipantAdapter.ParticipantViewHolder>() {
+class ParticipantAdapter(private var participantModels: List<ParticipantModel>) : RecyclerView.Adapter<ParticipantAdapter.ParticipantViewHolder>() {
 
     private var context: Context? = null
     private var itemClickListener: ItemClickListener? = null
@@ -58,8 +59,7 @@ class ParticipantAdapter(private val participantModels: List<ParticipantModel>) 
         holder.checkBox.setOnCheckedChangeListener { _, _ ->
             participantModelEntity = participantModels[holder.adapterPosition]
 
-            if (participantModels[holder.adapterPosition]
-                            .isVisited) {
+            if (participantModelEntity!!.isVisited) {
                 participantModelEntity!!.isVisited = false
             } else {
                 participantModelEntity!!.isVisited = true
@@ -78,5 +78,13 @@ class ParticipantAdapter(private val participantModels: List<ParticipantModel>) 
 
     override fun getItemCount(): Int {
         return participantModels.size
+    }
+
+    fun refreshData(list: List<ParticipantModel>) {
+
+        clear()
+        participantModels = list
+
+        notifyDataSetChanged()
     }
 }

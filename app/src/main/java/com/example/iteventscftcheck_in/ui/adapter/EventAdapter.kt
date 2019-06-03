@@ -14,9 +14,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.iteventscftcheck_in.App
 import com.example.iteventscftcheck_in.R
 import com.example.iteventscftcheck_in.db.model.EventsModel
+import rx.plugins.RxJavaHooks.clear
 
 
-internal class EventAdapter(private val eventsModels: List<EventsModel>) : RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
+internal class EventAdapter(private var eventsModels: List<EventsModel>) : RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
     private var context: Context? = null
     private var itemClickListener: ItemClickListener? = null
 
@@ -98,5 +99,13 @@ internal class EventAdapter(private val eventsModels: List<EventsModel>) : Recyc
 
     override fun getItemCount(): Int {
         return eventsModels.size
+    }
+
+    fun refreshData(list: List<EventsModel>) {
+
+        clear()
+        eventsModels = list
+
+        notifyDataSetChanged()
     }
 }
