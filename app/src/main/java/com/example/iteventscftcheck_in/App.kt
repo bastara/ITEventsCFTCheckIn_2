@@ -8,6 +8,7 @@ import com.example.iteventscftcheck_in.api.TeamCFTAPI
 import com.example.iteventscftcheck_in.db.DatabaseHelper
 
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 class App : Application() {
@@ -20,6 +21,7 @@ class App : Application() {
         val retrofit = Retrofit.Builder()
                 .baseUrl(this.getString(R.string.url))
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
         api = retrofit.create(TeamCFTAPI::class.java)
 

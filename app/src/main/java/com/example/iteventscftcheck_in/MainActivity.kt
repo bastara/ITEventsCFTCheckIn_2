@@ -1,11 +1,13 @@
 package com.example.iteventscftcheck_in
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 
 import com.example.iteventscftcheck_in.ui.adapter.EventAdapter
@@ -13,6 +15,9 @@ import com.example.iteventscftcheck_in.db.model.EventsModel
 import com.example.iteventscftcheck_in.model.City
 import com.example.iteventscftcheck_in.model.Events
 import com.example.iteventscftcheck_in.ui.ParticipantActivity
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Consumer
+import io.reactivex.schedulers.Schedulers
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -28,6 +33,7 @@ class MainActivity : AppCompatActivity(), EventAdapter.ItemClickListener {
     private lateinit var recyclerView: RecyclerView
     internal lateinit var events: MutableList<Events>
 
+    @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -44,28 +50,39 @@ class MainActivity : AppCompatActivity(), EventAdapter.ItemClickListener {
 
 
         //на яве работает, здесь не успел довести до умв.
-//        App.api?.getAllEvents()?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())?.subscribe(Consumer<List<Events>> { events ->
-//            events.addAll(events)
+//        App.api?.getAllEvents()?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())?.subscribe(Consumer<List<Events>> { newEvents ->
+//            events.addll(newEvents)
 //            if (fillDB()) {
 //                adapter?.refreshData(databaseHelper.dataDao
 //                        .allData)
 //            }
 //        })
 
-        App.api?.allPosts?.enqueue(object : Callback<List<Events>> {
-            override fun onResponse(call: Call<List<Events>>, response: Response<List<Events>>) {
-                events.addAll(Objects.requireNonNull<List<Events>>(response.body()))
-                if (fillDB()) {
-                    adapter?.refreshData(databaseHelper.dataDao
-                            .allData)
-                }
-            }
 
-            override fun onFailure(call: Call<List<Events>>, t: Throwable) {
-                Toast.makeText(this@MainActivity, "An error occurred during networking", Toast.LENGTH_SHORT)
-                        .show()
+        App.api?.getAllEvents()?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())?.subscribe({ refreshEvents ->
+            events.addAll(refreshEvents)
+            if (fillDB()) {
+                adapter?.refreshData(databaseHelper.dataDao
+                        .allData)
             }
         })
+
+
+//без РХ
+//        App.api?.allPosts?.enqueue(object : Callback<List<Events>> {
+//            override fun onResponse(call: Call<List<Events>>, response: Response<List<Events>>) {
+//                events.addAll(Objects.requireNonNull<List<Events>>(response.body()))
+//                if (fillDB()) {
+//                    adapter?.refreshData(databaseHelper.dataDao
+//                            .allData)
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<List<Events>>, t: Throwable) {
+//                Toast.makeText(this@MainActivity, "An error occurred during networking", Toast.LENGTH_SHORT)
+//                        .show()
+//            }
+//        })
     }
 
     private fun fillDB(): Boolean {
