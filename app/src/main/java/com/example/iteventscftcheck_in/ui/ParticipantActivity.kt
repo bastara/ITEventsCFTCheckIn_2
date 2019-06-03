@@ -1,8 +1,8 @@
 package com.example.iteventscftcheck_in.ui
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,19 +12,17 @@ import com.example.iteventscftcheck_in.R
 import com.example.iteventscftcheck_in.ui.adapter.ParticipantAdapter
 import com.example.iteventscftcheck_in.db.model.ParticipantModel
 import com.example.iteventscftcheck_in.model.Members
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 import java.util.ArrayList
-import java.util.Objects
-
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class ParticipantActivity : AppCompatActivity(), ParticipantAdapter.ItemClickListener {
 
     private lateinit var recyclerView: RecyclerView
     internal lateinit var members: MutableList<Members>
 
+    @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_participant)
@@ -39,20 +37,13 @@ class ParticipantActivity : AppCompatActivity(), ParticipantAdapter.ItemClickLis
         adapter.setClickListener(this@ParticipantActivity)
         recyclerView.adapter = adapter
 
-        App.api?.getMembersId(106)?.enqueue(object : Callback<List<Members>> {
-            override fun onResponse(call: Call<List<Members>>, response: Response<List<Members>>) {
-                members.addAll(Objects.requireNonNull<List<Members>>(response.body()))
-                if (fillDB()) {
-                    adapter.refreshData(databaseHelper.dataDao
-                            .allDataParticipant)
-                }
+        App.api?.getMembersIdRX(106)?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())?.subscribe { refreshMembers ->
+            members.addAll(refreshMembers)
+            if (fillDB()) {
+                adapter.refreshData(databaseHelper.dataDao
+                        .allDataParticipant)
             }
-
-            override fun onFailure(call: Call<List<Members>>, t: Throwable) {
-                Toast.makeText(this@ParticipantActivity, "An error occurred during networking", Toast.LENGTH_SHORT)
-                        .show()
-            }
-        })
+        }
     }
 
     private fun fillDB(): Boolean {

@@ -7,8 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 
 import com.example.iteventscftcheck_in.ui.adapter.EventAdapter
 import com.example.iteventscftcheck_in.db.model.EventsModel
@@ -16,18 +14,12 @@ import com.example.iteventscftcheck_in.model.City
 import com.example.iteventscftcheck_in.model.Events
 import com.example.iteventscftcheck_in.ui.ParticipantActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.ArrayList
 import java.util.Locale
-import java.util.Objects
-
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class MainActivity : AppCompatActivity(), EventAdapter.ItemClickListener {
     private lateinit var recyclerView: RecyclerView
@@ -48,41 +40,13 @@ class MainActivity : AppCompatActivity(), EventAdapter.ItemClickListener {
         adapter?.setClickListener(this@MainActivity)
         recyclerView.adapter = adapter
 
-
-        //на яве работает, здесь не успел довести до умв.
-//        App.api?.getAllEvents()?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())?.subscribe(Consumer<List<Events>> { newEvents ->
-//            events.addll(newEvents)
-//            if (fillDB()) {
-//                adapter?.refreshData(databaseHelper.dataDao
-//                        .allData)
-//            }
-//        })
-
-
-        App.api?.getAllEvents()?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())?.subscribe({ refreshEvents ->
+        App.api?.getAllEvents()?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())?.subscribe { refreshEvents ->
             events.addAll(refreshEvents)
             if (fillDB()) {
                 adapter?.refreshData(databaseHelper.dataDao
                         .allData)
             }
-        })
-
-
-//без РХ
-//        App.api?.allPosts?.enqueue(object : Callback<List<Events>> {
-//            override fun onResponse(call: Call<List<Events>>, response: Response<List<Events>>) {
-//                events.addAll(Objects.requireNonNull<List<Events>>(response.body()))
-//                if (fillDB()) {
-//                    adapter?.refreshData(databaseHelper.dataDao
-//                            .allData)
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<List<Events>>, t: Throwable) {
-//                Toast.makeText(this@MainActivity, "An error occurred during networking", Toast.LENGTH_SHORT)
-//                        .show()
-//            }
-//        })
+        }
     }
 
     private fun fillDB(): Boolean {
